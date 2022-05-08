@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.22)
 
 project(zonedetect C CXX)
+enable_testing()
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -17,19 +18,21 @@ include(${CMAKE_BINARY_DIR}/conan.cmake)
 
 conan_cmake_configure(
     REQUIRES
+        gtest/1.11.0
         shapelib/1.5.0
     GENERATORS
         cmake_find_package
     OPTIONS
         *:shared=False
-    )
+)
 conan_cmake_autodetect(settings)
 conan_cmake_install(
     PATH_OR_REFERENCE .
     BUILD outdated
     SETTINGS ${settings}
-    )
+)
 
+find_package(GTest)
 find_package(shapelib)
 
 include(FetchContent)
@@ -38,6 +41,7 @@ set(CMAKE_TLS_VERIFY true)
 
 add_subdirectory(library)
 add_subdirectory(database)
+add_subdirectory(test)
 
 add_executable(zonedetect_demo)
 target_sources(zonedetect_demo PRIVATE
