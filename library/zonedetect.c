@@ -25,6 +25,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include "zonedetect.h"
+
 #include <assert.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -40,8 +42,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 #endif
-
-#include "zonedetect.h"
 
 enum ZDInternalError {
     ZD_OK,

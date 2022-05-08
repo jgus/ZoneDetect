@@ -644,7 +644,7 @@ std::unordered_map<std::string, std::string> parseTimezoneToAlpha2(std::string p
 
 int main(int argc, char ** argv )
 {
-    if(argc != 7) {
+    if(argc != 8) {
         std::cout << "Wrong number of parameters\n";
         return 1;
     }
@@ -652,17 +652,21 @@ int main(int argc, char ** argv )
     tzidToAlpha2 = parseTimezoneToAlpha2("TODO");
 
     char tableType = argv[1][0];
-    std::string path = argv[2];
-    std::string outPath = argv[3];
-    unsigned int precision = strtol(argv[4], NULL, 10);
-    std::string notice = argv[5];
-    version = strtol(argv[6], NULL, 10);
+    std::string alpha2ToNamePath = argv[2];
+    std::string path = argv[3];
+    std::string outPath = argv[4];
+    unsigned int precision = strtol(argv[5], NULL, 10);
+    std::string notice = argv[6];
+    version = strtol(argv[7], NULL, 10);
     if(version > 1){
         std::cout << "Unknown version\n";
         return 1;
     }
 
-    DBFHandle dataHandle = DBFOpen("naturalearth/ne_10m_admin_0_countries_lakes", "rb" );
+    DBFHandle dataHandle = DBFOpen(alpha2ToNamePath.c_str(), "rb" );
+    if( dataHandle == NULL ) {
+        errorFatal("Could not open alpha2ToName file\n");
+    }
     alpha2ToName = parseAlpha2ToName(dataHandle);
     DBFClose(dataHandle);
 

@@ -1,0 +1,13 @@
+{
+    "cmake.preferredGenerators": [ "Ninja" ],
+    "cmake.debugConfig": {
+        "args": [
+            "C",
+            "C:/Users/Josh/Git/ZoneDetect/build/_deps/naturalearthdata-src/ne_10m_admin_0_countries_lakes",
+            "C:/Users/Josh/Git/ZoneDetect/build/database/builder/out/country16.bin",
+            "16",
+            "Made with Natural Earth, placed in the Public Domain.",
+            "0"
+        ]
+    }
+}
