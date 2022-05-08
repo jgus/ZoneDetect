@@ -912,7 +912,7 @@ ZoneDetect *ZDOpenDatabase(const char *path) {
 #if defined(_MSC_VER) || defined(__MINGW32__)
     library->fd = CreateFile(path,
                              GENERIC_READ,
-                             0,
+                             FILE_SHARE_READ,
                              NULL,
                              OPEN_EXISTING,
                              FILE_ATTRIBUTE_NORMAL,
