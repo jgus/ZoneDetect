@@ -85,4 +85,57 @@ void ZDHelperSimpleLookupStringFree(char *str);
 
 #ifdef __cplusplus
 }
-#endif
+
+namespace zonedetect {
+
+struct DetectResult {
+  DetectResult(const ZoneDetectResult &result)
+      : lookupResult{result.lookupResult},
+        polygonId{result.polygonId},
+        metaId{result.metaId} {
+    for (auto i = 0; i < result.numFields; ++i) {
+      fields.emplace(result.fieldNames[i], result.data[i]);
+    }
+  }
+
+  ZDLookupResult lookupResult;
+  uint32_t polygonId;
+  uint32_t metaId;
+  std::map<std::string, std::string> fields;
+};
+class Database {
+ public:
+  explicit Database(const char *path)
+      : db_{ZDOpenDatabase(path), &ZDCloseDatabase} {
+    if (!db_) throw std::exception{"Failed to open DB"};
+  }
+  Database(void *buffer, size_t length)
+      : db_{ZDOpenDatabaseFromMemory(buffer, length), &ZDCloseDatabase} {
+    if (!db_) throw std::exception{"Failed to open DB"};
+  }
+
+  DetectResult Lookup(float lat, float lon) const {
+    std::unique_ptr<ZoneDetectResult, decltype(&ZDFreeResults)> results{
+        ZDLookup(db_.get(), lat, lon, nullptr), &ZDFreeResults};
+    if (!results) throw std::exception{"Failed to look up result"};
+    return DetectResult{*results};
+  }
+
+  std::string LookupString(float lat, float lon) const {
+    std::unique_ptr<char, decltype(&ZDHelperSimpleLookupStringFree)> result{
+        ZDHelperSimpleLookupString(db_.get(), lat, lon),
+        &ZDHelperSimpleLookupStringFree};
+    return std::string{result.get()};
+  }
+
+  std::string Notice() const { return ZDGetNotice(db_.get()); }
+
+  uint8_t TableType() const { return ZDGetTableType(db_.get()); }
+
+ private:
+  std::unique_ptr<ZoneDetect, decltype(&ZDCloseDatabase)> db_;
+};
+
+};  // namespace zonedetect
+
+#endif // __cplusplus

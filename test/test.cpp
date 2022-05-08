@@ -17,9 +17,22 @@ TEST(ZoneDetect, ZDHelperSimpleLookupString) {
       ZDOpenDatabase(DB_PATH), &ZDCloseDatabase};
   ASSERT_NE(db, nullptr);
 
-  std::unique_ptr<char, decltype(&ZDHelperSimpleLookupStringFree)> results_denver{
-      ZDHelperSimpleLookupString(db.get(), 39.7392, -104.9903), &ZDHelperSimpleLookupStringFree};
+  std::unique_ptr<char, decltype(&ZDHelperSimpleLookupStringFree)>
+      results_denver{ZDHelperSimpleLookupString(db.get(), 39.7392, -104.9903),
+                     &ZDHelperSimpleLookupStringFree};
   ASSERT_NE(results_denver, nullptr);
-      std::string str_denver{results_denver.get()};
+  std::string str_denver{results_denver.get()};
+  EXPECT_EQ(str_denver, "America/Denver");
+}
+
+TEST(ZoneDetectCPP, ZDLookup) {
+  zonedetect::Database db{DB_PATH};
+  auto results_denver = db.Lookup(39.7392, -104.9903);
+  EXPECT_EQ(results_denver.lookupResult, ZD_LOOKUP_IN_ZONE);
+}
+
+TEST(ZoneDetectCPP, ZDHelperSimpleLookupString) {
+  zonedetect::Database db{DB_PATH};
+  auto str_denver = db.LookupString(39.7392, -104.9903);
   EXPECT_EQ(str_denver, "America/Denver");
 }
