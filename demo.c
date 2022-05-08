@@ -14,10 +14,10 @@
  *       names of its contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR DISTRIBUTOR BE LIABLE FOR ANY
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR DISTRIBUTOR BE LIABLE FOR ANY
  * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
  * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
@@ -28,64 +28,68 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "zonedetect.h"
 
-void printResults(ZoneDetect *cd, ZoneDetectResult *results, float safezone)
-{
-    if(!results) {
-        printf("No results\n");
-        return;
-    }
+void printResults(ZoneDetect *cd, ZoneDetectResult *results, float safezone) {
+  if (!results) {
+    printf("No results\n");
+    return;
+  }
 
-    unsigned int index = 0;
-    while(results[index].lookupResult != ZD_LOOKUP_END) {
-        printf("%s:\n", ZDLookupResultToString(results[index].lookupResult));
-        printf("  meta: %u\n", results[index].metaId);
-        printf("  polygon: %u\n", results[index].polygonId);
-        if(results[index].data) {
-            for(unsigned int i = 0; i < results[index].numFields; i++) {
-                if(results[index].fieldNames[i] && results[index].data[i]) {
-                    printf("  %s: %s\n", results[index].fieldNames[i], results[index].data[i]);
-                }
-            }
+  unsigned int index = 0;
+  while (results[index].lookupResult != ZD_LOOKUP_END) {
+    printf("%s:\n", ZDLookupResultToString(results[index].lookupResult));
+    printf("  meta: %u\n", results[index].metaId);
+    printf("  polygon: %u\n", results[index].polygonId);
+    if (results[index].data) {
+      for (unsigned int i = 0; i < results[index].numFields; i++) {
+        if (results[index].fieldNames[i] && results[index].data[i]) {
+          printf("  %s: %s\n",
+                 results[index].fieldNames[i],
+                 results[index].data[i]);
         }
-        
-        index++;
+      }
     }
-    ZDFreeResults(results);
 
-    if(index) {
-        printf("Safezone: %f\n", safezone);
-    }
+    index++;
+  }
+  ZDFreeResults(results);
+
+  if (index) {
+    printf("Safezone: %f\n", safezone);
+  }
 }
 
-void onError(int errZD, int errNative)
-{
-    fprintf(stderr, "ZD error: %s (0x%08X)\n", ZDGetErrorString(errZD), (unsigned)errNative);
+void onError(int errZD, int errNative) {
+  fprintf(stderr,
+          "ZD error: %s (0x%08X)\n",
+          ZDGetErrorString(errZD),
+          (unsigned)errNative);
 }
 
-int main(int argc, char *argv[])
-{
-    if(argc != 4) {
-        printf("Usage: %s dbname lat lon\n", argv[0]);
-        return 1;
-    }
+int main(int argc, char *argv[]) {
+  if (argc != 4) {
+    printf("Usage: %s dbname lat lon\n", argv[0]);
+    return 1;
+  }
 
-    ZDSetErrorHandler(onError);
+  ZDSetErrorHandler(onError);
 
-    ZoneDetect *const cd = ZDOpenDatabase(argv[1]);
-    if(!cd) return 2;
+  ZoneDetect *const cd = ZDOpenDatabase(argv[1]);
+  if (!cd) return 2;
 
-    const float lat = (float)atof(argv[2]);
-    const float lon = (float)atof(argv[3]);
+  const float lat = (float)atof(argv[2]);
+  const float lon = (float)atof(argv[3]);
 
-    float safezone = 0;
-    ZoneDetectResult *results = ZDLookup(cd, lat, lon, &safezone);
-    printResults(cd, results, safezone);
+  float safezone = 0;
+  ZoneDetectResult *results = ZDLookup(cd, lat, lon, &safezone);
+  printResults(cd, results, safezone);
 
-    printf("The simple string is [%s]\n", ZDHelperSimpleLookupString(cd, lat, lon));
+  printf("The simple string is [%s]\n",
+         ZDHelperSimpleLookupString(cd, lat, lon));
 
-    ZDCloseDatabase(cd);
+  ZDCloseDatabase(cd);
 
-    return 0;
+  return 0;
 }
