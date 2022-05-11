@@ -3,6 +3,14 @@ cmake_minimum_required(VERSION 3.22)
 project(zonedetect C CXX)
 enable_testing()
 
+if(NOT EXISTS ${CMAKE_BINARY_DIR}/conaninfo.txt)
+    execute_process(
+        COMMAND conan install -s build_type=${CMAKE_BUILD_TYPE} --build=outdated ${CMAKE_SOURCE_DIR}
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    )
+    list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
+endif()
+
 find_package(GTest)
 find_package(shapelib)
 

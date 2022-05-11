@@ -74,7 +74,7 @@ struct ZoneDetectOpaque {
 #endif
 
   uint8_t closeType;
-  uint8_t *mapping;
+  const uint8_t *mapping;
 
   uint8_t tableType;
   uint8_t version;
@@ -120,8 +120,8 @@ static unsigned int ZDDecodeVariableLengthUnsigned(const ZoneDetect *library,
 #if defined(_MSC_VER)
   __try {
 #endif
-    uint8_t *const buffer = library->mapping + *index;
-    uint8_t *const bufferEnd = library->mapping + library->length - 1;
+    const uint8_t *const buffer = library->mapping + *index;
+    const uint8_t *const bufferEnd = library->mapping + library->length - 1;
 
     unsigned int shift = 0;
     while (1) {
@@ -869,7 +869,7 @@ void ZDCloseDatabase(ZoneDetect *library) {
   }
 }
 
-ZoneDetect *ZDOpenDatabaseFromMemory(void *buffer, size_t length) {
+ZoneDetect *ZDOpenDatabaseFromMemory(const void *buffer, size_t length) {
   ZoneDetect *const library = malloc(sizeof *library);
 
   if (library) {

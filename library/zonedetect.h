@@ -58,7 +58,7 @@ extern "C" {
 #endif
 
 ZoneDetect *ZDOpenDatabase(const char *path);
-ZoneDetect *ZDOpenDatabaseFromMemory(void *buffer, size_t length);
+ZoneDetect *ZDOpenDatabaseFromMemory(const void *buffer, size_t length);
 void ZDCloseDatabase(ZoneDetect *library);
 
 ZoneDetectResult *ZDLookup(const ZoneDetect *library,
@@ -109,7 +109,7 @@ class Database {
       : db_{ZDOpenDatabase(path), &ZDCloseDatabase} {
     if (!db_) throw std::exception{"Failed to open DB"};
   }
-  Database(void *buffer, size_t length)
+  Database(const void *buffer, size_t length)
       : db_{ZDOpenDatabaseFromMemory(buffer, length), &ZDCloseDatabase} {
     if (!db_) throw std::exception{"Failed to open DB"};
   }
