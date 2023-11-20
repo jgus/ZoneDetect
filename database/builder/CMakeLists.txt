@@ -3,7 +3,7 @@ target_sources(zonedetect_builder PRIVATE
     builder.cpp
 )
 target_link_libraries(zonedetect_builder PRIVATE
-    shapelib::shp
+    shp
 )
 
 FetchContent_Declare(naturalearthdata
