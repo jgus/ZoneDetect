@@ -25,10 +25,10 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <math.h>
 #include <shapefil.h>
 
 #include <algorithm>
+#include <cstdint>
 #include <fstream>
 #include <functional>
 #include <iostream>
@@ -622,6 +622,7 @@ std::unordered_map<std::string, std::string> parseAlpha2ToName(
   result["YT"] = "Mayotte";
   result["RE"] = "Réunion";
   result["TK"] = "Tokelau";
+  result["TW"] = "Taiwan";
 
   return result;
 }
