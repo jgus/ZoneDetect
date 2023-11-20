@@ -1,6 +1,6 @@
 add_executable(zonedetect_test)
 target_compile_definitions(zonedetect_test PRIVATE
-    DB_PATH="${CMAKE_BINARY_DIR}/out_v1/timezone21.bin"
+    DB_PATH="${PROJECT_BINARY_DIR}/out_v1/timezone21.bin"
 )
 target_sources(zonedetect_test PRIVATE
     test.cpp
