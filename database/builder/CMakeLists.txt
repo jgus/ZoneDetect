@@ -14,7 +14,7 @@ FetchContent_MakeAvailable(naturalearthdata)
 
 FetchContent_Declare(timezonedata
     URL https://github.com/evansiroky/timezone-boundary-builder/releases/download/2022f/timezones-with-oceans.shapefile.zip
-    URL_HASH SHA256=8eabf4ad0ecb4660ebcb149b3e11c621c75e9e127e2cfceb789e1cdc74ea6fa8
+    URL_HASH SHA256=7b63a0b4b63280fd951548d38a1c3fdbc3eaf42fe11e91b2a90b49f744b9503e
 )
 FetchContent_MakeAvailable(timezonedata)
 
